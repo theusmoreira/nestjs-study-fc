@@ -1,0 +1,13 @@
+GET http://localhost:3000/tweets
+
+###
+POST http://localhost:3000/tweets
+Content-Type: application/json
+
+{
+    "Text": "Nestjs é muito show.....",
+    "User": {
+        "Name": "Matheus Santos"
+    }
+}
+
