@@ -6,16 +6,18 @@ import { Tweet, TweetSchema } from './schemas/tweet.schema';
 import { CheckNewTweetsTask } from './check-new-tweets/check-new-tweets.task';
 import * as redisStore from 'cache-manager-redis-store';
 import { BullModule } from '@nestjs/bull';
-
-const store = redisStore.create({
-  host: 'redis',
-  port: 6379,
-});
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
-    CacheModule.register({
-      store,
+    ConfigModule.forRoot(),
+    CacheModule.registerAsync({
+      useFactory: () => ({
+        store: redisStore.create({
+          host: process.env.REDIS_HOST,
+          port: Number(process.env.REDIS_PORT),
+        }),
+      }),
     }),
     MongooseModule.forFeature([
       {
